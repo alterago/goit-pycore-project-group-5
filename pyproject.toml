@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personal-assistant"
+version = "0.1.0"
+description = "Console personal assistant: an address book and a notebook"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "prompt_toolkit>=3.0",
+    "rich>=13",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "flake8>=7",
+    "pre-commit>=3",
+]
+
+[project.scripts]
+assistant = "personal_assistant.cli.app:main"
+
+[tool.setuptools.packages.find]
+include = ["personal_assistant*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+xfail_strict = true
