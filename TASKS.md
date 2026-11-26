@@ -1,5 +1,8 @@
 # Tasks
 
+Each task is a GitHub issue with a detailed checklist (links in the table);
+this file is the short version.
+
 The core already works: contacts with phones and birthdays, notes (add and
 show), saving, the command loop with completion. The parts below are left as
 `NotImplementedError("T<n>: ...")`. The commands for them are already wired,
@@ -15,22 +18,23 @@ How to take a task:
 4. Try the commands by hand in `python -m personal_assistant`.
 5. Pull request to `main`, one reviewer from the team.
 
-| # | Task | Where | Size |
-|---|------|-------|------|
-| T1 | E-mail and address fields | `fields.py`: `Email`, `Address` | S |
-| T2 | Phone in common formats | `fields.py`: `normalize_phone`, `Phone` | S |
-| T3 | Contact search | `contacts.py`: `AddressBook.search` | S |
-| T4 | Delete and rename contacts | `contacts.py`: `AddressBook.delete`, `rename` | S |
-| T5 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | M |
-| T6 | Edit and delete notes | `notes.py`: `NoteBook.edit`, `delete` | S |
-| T7 | Note search | `notes.py`: `NoteBook.search` | S |
-| T8 | Tags (extra part) | `notes.py`: `Note.add_tag`, `remove_tag`, `NoteBook.find_by_tag`, `sorted_by_tags` | M |
-| T9 | Guess the command (extra part) | `cli/suggest.py`: `suggest_command` | S |
+| # | Task | Where | Size | Issue |
+|---|------|-------|------|-------|
+| T1 | E-mail and address fields | `fields.py`: `Email`, `Address` | S | [#1](https://github.com/alterago/goit-pycore-project-group-5/issues/1) |
+| T2 | Phone in common formats | `fields.py`: `normalize_phone`, `Phone` | S | [#2](https://github.com/alterago/goit-pycore-project-group-5/issues/2) |
+| T3 | Contact search | `contacts.py`: `AddressBook.search` | S | [#3](https://github.com/alterago/goit-pycore-project-group-5/issues/3) |
+| T4 | Delete and rename contacts | `contacts.py`: `AddressBook.delete`, `rename` | S | [#4](https://github.com/alterago/goit-pycore-project-group-5/issues/4) |
+| T5 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | M | [#5](https://github.com/alterago/goit-pycore-project-group-5/issues/5) |
+| T6 | Edit and delete notes | `notes.py`: `NoteBook.edit`, `delete` | S | [#6](https://github.com/alterago/goit-pycore-project-group-5/issues/6) |
+| T7 | Note search | `notes.py`: `NoteBook.search` | S | [#7](https://github.com/alterago/goit-pycore-project-group-5/issues/7) |
+| T8 | Tags (extra part) | `notes.py`: `Note.add_tag`, `remove_tag`, `NoteBook.find_by_tag`, `sorted_by_tags` | M | [#8](https://github.com/alterago/goit-pycore-project-group-5/issues/8) |
+| T9 | Guess the command (extra part) | `cli/suggest.py`: `suggest_command` | S | [#9](https://github.com/alterago/goit-pycore-project-group-5/issues/9) |
 
 ## T1 — E-mail and address fields
 
 `Email(value)`: strip spaces; one `@`; a non-empty part before it; a domain
-with a dot after it; no spaces. Otherwise `ValueError` with a clear message.
+with a dot after it; no spaces. Otherwise `ValueError` whose message starts
+with `Invalid e-mail`.
 `Address(value)`: strip spaces; not empty; at most 200 characters.
 
 Done when: `tests/tasks/test_t1_email_address.py` passes; `add-email` and
@@ -43,7 +47,8 @@ Done when: `tests/tasks/test_t1_email_address.py` passes; `add-email` and
 spaces, dashes and brackets, then the leading `+38`/`38`. `Phone` calls it
 before its 10-digit check, so the stored value is always 10 digits.
 
-Done when: `tests/tasks/test_t2_phone_formats.py` passes; `add John "+38 (050) 123-45-67"` stores `0501234567`.
+Done when: `tests/tasks/test_t2_phone_formats.py` passes; `add John "+38 (050) 123-45-67"`
+stores `0501234567`; the same number in another format is a duplicate.
 
 ## T3 — Contact search
 
@@ -58,8 +63,8 @@ Done when: `tests/tasks/test_t3_contact_search.py` passes; `search` shows a tabl
 `AddressBook.delete(name)`: find the record ignoring the case and remove it;
 `KeyError` when there is none. `AddressBook.rename(old, new)`: the record
 keeps its phones and other fields and is stored under the new name;
-`KeyError` for an unknown contact; `ValueError` when another contact already
-has the new name (any case). Return the record.
+`KeyError` for an unknown contact; `ValueError("Contact <name> already exists.")`
+when another contact already has the new name (any case). Return the record.
 
 Done when: `tests/tasks/test_t4_delete_rename.py` passes; `delete` and `rename` work.
 

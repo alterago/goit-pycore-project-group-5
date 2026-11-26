@@ -25,3 +25,13 @@ def test_nothing_close_gives_none():
 
 def test_unknown_command_message_has_the_guess():
     assert "Did you mean 'add-note'?" in str(unknown_command("ad-note"))
+
+
+def test_suggestion_ignores_letter_case():
+    assert suggest_command("NOTES", command_names()) == "notes"
+
+
+def test_loop_prints_the_guess(state, capsys):
+    from personal_assistant.cli import app
+    app.handle("serch John", state)
+    assert "Did you mean 'search'?" in capsys.readouterr().out

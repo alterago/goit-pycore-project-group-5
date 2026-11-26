@@ -20,3 +20,28 @@ def test_search_by_part_of_phone(book):
 
 def test_nothing_found_gives_empty_list(book):
     assert book.search("zzz") == []
+
+
+def test_search_by_email_and_address(book):
+    from personal_assistant.fields import Field
+    book["Jane"].email = Field("jane@mail.example")
+    book["John"].address = Field("Kyiv, Main St 1")
+    assert names(book.search("MAIL.EXAMPLE")) == ["Jane"]
+    assert names(book.search("kyiv")) == ["John"]
+
+
+# Command level: what the user sees.
+
+def test_cmd_search_shows_only_matches(cli):
+    output = cli("search jo")
+    assert "John" in output and "Jane" not in output
+
+
+def test_cmd_search_words_with_spaces(cli, book):
+    from personal_assistant.fields import Field
+    book["John"].address = Field("Kyiv, Main St 1")
+    assert "John" in cli('search "main st"')
+
+
+def test_cmd_search_nothing_found(cli):
+    assert cli("search zzz") == "Nothing found."

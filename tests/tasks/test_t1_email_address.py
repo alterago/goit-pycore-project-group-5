@@ -34,3 +34,29 @@ def test_record_shows_email_and_address():
     record.set_email("john@example.com")
     record.set_address("Kyiv")
     assert str(record) == "John: no phones, email: john@example.com, address: Kyiv"
+
+
+# Command level: what the user sees.
+
+def test_cmd_add_email_shows_in_contact(cli):
+    assert cli("add-email John john@example.com") == "E-mail saved."
+    assert "john@example.com" in cli("show John")
+
+
+def test_cmd_bad_email_is_reported_and_not_saved(cli, state):
+    assert cli("add-email John john@").startswith("Invalid e-mail")
+    assert state.book["John"].email is None
+
+
+def test_cmd_add_address_with_and_without_quotes(cli, state):
+    assert cli('add-address John "Kyiv, Main St 1"') == "Address saved."
+    assert state.book["John"].address.value == "Kyiv, Main St 1"
+    cli("add-address Jane Lviv Market Sq 5")
+    assert state.book["Jane"].address.value == "Lviv Market Sq 5"
+
+
+def test_email_and_address_survive_restart(cli, reload):
+    cli("add-email John john@example.com")
+    cli("add-address John Kyiv")
+    john = reload().book["John"]
+    assert (john.email.value, john.address.value) == ("john@example.com", "Kyiv")

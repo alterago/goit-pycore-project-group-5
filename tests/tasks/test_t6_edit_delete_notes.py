@@ -40,3 +40,33 @@ def test_delete_removes_the_note_and_ids_are_not_reused(notes):
 def test_delete_unknown_note_raises_key_error(notes):
     with pytest.raises(KeyError):
         notes.delete(99)
+
+
+# Command level: what the user sees.
+
+@pytest.fixture
+def with_note(cli):
+    cli("add-note Buy milk")
+    return cli
+
+
+def test_cmd_edit_note(with_note):
+    assert with_note("edit-note 1 Buy oat milk") == "Note changed."
+    assert "Buy oat milk" in with_note("notes")
+
+
+def test_cmd_edit_unknown_note(with_note):
+    assert with_note("edit-note 7 text").startswith("Not found")
+
+
+def test_cmd_delete_note(with_note):
+    assert with_note("delete-note 1") == "Note deleted."
+    assert with_note("notes") == "No notes saved."
+
+
+def test_edit_and_delete_survive_restart(with_note, reload):
+    with_note("add-note Second")
+    with_note("edit-note 1 Changed")
+    with_note("delete-note 2")
+    notes = reload().notes
+    assert [(i, n.text) for i, n in notes.items()] == [(1, "Changed")]

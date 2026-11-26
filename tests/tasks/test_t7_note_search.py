@@ -26,3 +26,17 @@ def test_search_returns_the_notes(notes):
 
 def test_nothing_found_gives_empty_list(notes):
     assert notes.search("zzz") == []
+
+
+# Command level: what the user sees.
+
+def test_cmd_search_notes(cli):
+    cli("add-note Buy milk")
+    cli("add-note Call the mentor")
+    output = cli("search-notes MILK")
+    assert "Buy milk" in output and "mentor" not in output
+
+
+def test_cmd_search_notes_nothing_found(cli):
+    cli("add-note Buy milk")
+    assert cli("search-notes zzz") == "Nothing found."
