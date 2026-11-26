@@ -21,14 +21,14 @@ How to take a task:
 
 | # | Task | Where | Issue |
 |---|------|-------|-------|
-| T1 | E-mail and address in a contact | `fields.py`: `Email`, `Address` | — |
-| T2 | Contact search | `contacts.py`: `AddressBook.search` | — |
-| T3 | Delete a contact | `contacts.py`: `AddressBook.delete` | — |
-| T4 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | — |
-| T5 | Search, edit and delete notes | `notes.py`: `NoteBook.search`, `edit`, `delete` | — |
-| T6 | Add tags to notes (extra) | `notes.py`: `Note.add_tag` | — |
-| T7 | Search and sort notes by tags (extra) | `notes.py`: `NoteBook.find_by_tag`, `sorted_by_tags` | — |
-| T8 | Guess the command (extra) | `cli/suggest.py`: `suggest_command` | — |
+| T1 | E-mail and address in a contact | `fields.py`: `Email`, `Address` | [#10](https://github.com/alterago/goit-pycore-project-group-5/issues/10) |
+| T2 | Contact search | `contacts.py`: `AddressBook.search` | [#11](https://github.com/alterago/goit-pycore-project-group-5/issues/11) |
+| T3 | Delete a contact | `contacts.py`: `AddressBook.delete` | [#12](https://github.com/alterago/goit-pycore-project-group-5/issues/12) |
+| T4 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | [#13](https://github.com/alterago/goit-pycore-project-group-5/issues/13) |
+| T5 | Search, edit and delete notes | `notes.py`: `NoteBook.search`, `edit`, `delete` | [#14](https://github.com/alterago/goit-pycore-project-group-5/issues/14) |
+| T6 | Add tags to notes (extra) | `notes.py`: `Note.add_tag` | [#15](https://github.com/alterago/goit-pycore-project-group-5/issues/15) |
+| T7 | Search and sort notes by tags (extra) | `notes.py`: `NoteBook.find_by_tag`, `sorted_by_tags` | [#16](https://github.com/alterago/goit-pycore-project-group-5/issues/16) |
+| T8 | Guess the command (extra) | `cli/suggest.py`: `suggest_command` | [#17](https://github.com/alterago/goit-pycore-project-group-5/issues/17) |
 
 Where the ТЗ says nothing about a detail, the rule below is the team's choice
 and is marked so.
