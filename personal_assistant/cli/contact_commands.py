@@ -73,12 +73,6 @@ def delete_contact(args: list[str], state: AppState):
     return "Contact deleted."
 
 
-def rename_contact(args: list[str], state: AppState):
-    require_args(args, 2, "rename <name> <new name>")
-    state.book.rename(args[0], args[1])
-    return "Contact renamed."
-
-
 def birthdays(args: list[str], state: AppState):
     days = int(args[0]) if args and args[0].isdigit() else DEFAULT_BIRTHDAY_DAYS
     upcoming = state.book.upcoming_birthdays(days)
@@ -99,7 +93,6 @@ COMMANDS = [
     Command("add-address", set_address, "add-address <name> <address>", "set an address"),
     Command("search", search_contacts, "search <text>", "find contacts by any field",
             changes_data=False),
-    Command("rename", rename_contact, "rename <name> <new name>", "rename a contact"),
     Command("delete", delete_contact, "delete <name>", "delete a contact"),
     Command("birthdays", birthdays, "birthdays [days]",
             f"birthdays in the next days (default {DEFAULT_BIRTHDAY_DAYS})", changes_data=False),

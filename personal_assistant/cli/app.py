@@ -31,7 +31,7 @@ def make_reader() -> Callable[[str], str]:
 def unknown_command(name: str) -> Text:
     try:
         guess = suggest_command(name, command_names())
-    except NotImplementedError:  # T9 is not done yet
+    except NotImplementedError:  # T8 is not done yet
         guess = None
     hint = f" Did you mean '{guess}'?" if guess else " Type 'help' to see the commands."
     return Text(f"Unknown command '{name}'.{hint}", style="yellow")

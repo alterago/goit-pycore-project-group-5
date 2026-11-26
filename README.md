@@ -5,7 +5,7 @@ group 5, Python Programming (GoIT Neoversity).
 
 ## What it does
 
-- Contacts: name, phones, birthday, e-mail, address; add, change, search, rename, delete.
+- Contacts: name, phones, birthday, e-mail, address; add, change, search, delete.
 - Birthdays coming in the next N days.
 - Validation of phones, e-mails and birthdays when a contact is added or changed.
 - Notes: add, show, edit, delete, search; tags, search and sorting by tags.
@@ -58,12 +58,12 @@ Note 1 added.
 | `add-email <name> <email>` | set an e-mail |
 | `add-address <name> <address>` | set an address |
 | `search <text>` | find contacts by any field |
-| `rename <name> <new name>` / `delete <name>` | rename / delete a contact |
+| `delete <name>` | delete a contact |
 | `birthdays [days]` | birthdays in the next days (7 by default) |
 | `add-note <text>` / `notes` | add a note / show all notes |
 | `edit-note <id> <text>` / `delete-note <id>` | change / delete a note |
 | `search-notes <text>` | find notes by text |
-| `tag <id> <tag> [tag...]` / `untag <id> <tag>` | add / remove tags |
+| `tag <id> <tag> [tag...]` | add tags to a note |
 | `find-tag <tag>` / `notes-by-tags` | notes with a tag / notes sorted by tags |
 
 ## Development

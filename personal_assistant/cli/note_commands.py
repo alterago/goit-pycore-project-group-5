@@ -43,12 +43,6 @@ def tag_note(args: list[str], state: AppState):
     return "Tags added."
 
 
-def untag_note(args: list[str], state: AppState):
-    require_args(args, 2, "untag <id> <tag>")
-    state.notes.get_note(parse_id(args[0])).remove_tag(args[1])
-    return "Tag removed."
-
-
 def find_tag(args: list[str], state: AppState):
     require_args(args, 1, "find-tag <tag>")
     found = state.notes.find_by_tag(args[0])
@@ -69,7 +63,6 @@ COMMANDS = [
     Command("search-notes", search_notes, "search-notes <text>", "find notes by text",
             changes_data=False),
     Command("tag", tag_note, "tag <id> <tag> [tag...]", "add tags to a note"),
-    Command("untag", untag_note, "untag <id> <tag>", "remove a tag from a note"),
     Command("find-tag", find_tag, "find-tag <tag>", "notes with a tag", changes_data=False),
     Command("notes-by-tags", notes_by_tags, "notes-by-tags", "notes sorted by tags",
             changes_data=False),

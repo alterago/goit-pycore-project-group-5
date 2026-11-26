@@ -81,27 +81,20 @@ class AddressBook(UserDict):
     def delete(self, name: str) -> None:
         """Delete the contact; raise KeyError when there is no such contact.
 
-        TASK T4 — see TASKS.md.
+        TASK T3 — see TASKS.md.
         """
-        raise NotImplementedError("T4: delete a contact")
-
-    def rename(self, old_name: str, new_name: str) -> Record:
-        """Give the contact a new name and return its record.
-
-        TASK T4 — see TASKS.md.
-        """
-        raise NotImplementedError("T4: rename a contact")
+        raise NotImplementedError("T3: delete a contact")
 
     def search(self, query: str) -> list[Record]:
         """Return contacts whose name, phone, e-mail or address contains ``query``.
 
-        TASK T3 — see TASKS.md.
+        TASK T2 — see TASKS.md.
         """
-        raise NotImplementedError("T3: contact search")
+        raise NotImplementedError("T2: contact search")
 
     def upcoming_birthdays(self, days: int, today: date | None = None) -> list[tuple[date, Record]]:
         """Return (birthday date, record) for birthdays from today to today + ``days``.
 
-        TASK T5 — see TASKS.md. Use birthdays.next_birthday().
+        TASK T4 — see TASKS.md. Use birthdays.next_birthday().
         """
-        raise NotImplementedError("T5: upcoming birthdays")
+        raise NotImplementedError("T4: upcoming birthdays")

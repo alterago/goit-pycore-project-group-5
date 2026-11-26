@@ -1,4 +1,8 @@
-"""T1 — e-mail and address fields. Delete the `pytestmark` line when the task is done."""
+"""T1 — e-mail and address in a contact. Delete the `pytestmark` line when the task is done.
+
+ТЗ: «Зберігати контакти з іменами, адресами, номерами телефонів, email та днями народження»;
+«Валідація номера телефону та електронної пошти під час додавання або редагування контакту».
+"""
 
 import pytest
 
@@ -15,7 +19,7 @@ def test_email_is_stored_stripped():
 @pytest.mark.parametrize("bad", ["", "john", "john@", "@example.com", "john@example",
                                  "jo hn@example.com", "john@@example.com"])
 def test_bad_email_is_rejected(bad):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="^Invalid e-mail"):
         Email(bad)
 
 
@@ -23,8 +27,8 @@ def test_address_is_stored_stripped():
     assert Address("  Kyiv, Khreshchatyk St 1 ").value == "Kyiv, Khreshchatyk St 1"
 
 
-@pytest.mark.parametrize("bad", ["", "   ", "x" * 201])
-def test_bad_address_is_rejected(bad):
+@pytest.mark.parametrize("bad", ["", "   "])
+def test_empty_address_is_rejected(bad):
     with pytest.raises(ValueError):
         Address(bad)
 

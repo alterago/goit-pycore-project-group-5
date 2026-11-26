@@ -1,12 +1,16 @@
-"""T5 — birthdays in the next N days. Delete the `pytestmark` line when the task is done."""
+"""T4 — birthdays in the next N days. Delete the `pytestmark` line when the task is done.
 
-from datetime import date
+ТЗ: «Виводити список контактів, у яких день народження через задану кількість днів
+від поточної дати».
+"""
+
+from datetime import date, timedelta
 
 import pytest
 
 from personal_assistant.contacts import AddressBook, Record
 
-pytestmark = pytest.mark.xfail(reason="T5 is not done yet", strict=True)
+pytestmark = pytest.mark.xfail(reason="T4 is not done yet", strict=True)
 
 
 def make_book(*items):
@@ -39,15 +43,9 @@ def test_contacts_without_birthday_are_skipped(book):
         (date(2026, 3, 15), "John")]
 
 
-def test_negative_days_are_rejected(book):
-    with pytest.raises(ValueError):
-        book.upcoming_birthdays(-1)
-
-
 # Command level: what the user sees. The dates are counted from the real today.
 
 def in_days(days):
-    from datetime import timedelta
     day = date.today() + timedelta(days=days)
     return day.replace(year=day.year - 28).strftime("%d.%m.%Y")  # 28 years: leap stays leap
 

@@ -32,19 +32,10 @@ class Name(Field):
         super().__init__(value)
 
 
-def normalize_phone(value: str) -> str:
-    """Bring a phone written as '+38 (050) 123-45-67' to '0501234567'.
-
-    TASK T2 — see TASKS.md.
-    """
-    raise NotImplementedError("T2: phone normalization")
-
-
 class Phone(Field):
     """Phone number of exactly 10 digits."""
 
     def __init__(self, value: str):
-        # T2: normalize the value with normalize_phone() before the check.
         if not (len(value) == PHONE_LENGTH and value.isdigit()):
             raise ValueError(f"Phone must contain exactly {PHONE_LENGTH} digits.")
         super().__init__(value)
@@ -77,7 +68,7 @@ class Email(Field):
 
 
 class Address(Field):
-    """Postal address: free text, not empty, at most 200 characters.
+    """Postal address: free text, not empty.
 
     TASK T1 — see TASKS.md.
     """

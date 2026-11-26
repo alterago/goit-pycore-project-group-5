@@ -1,8 +1,14 @@
-"""T3 — contact search. Delete the `pytestmark` line when the task is done."""
+"""T2 — contact search. Delete the `pytestmark` line when the task is done.
+
+ТЗ: «Здійснювати пошук контактів серед контактів книги»;
+«Пошук контактів за різними критеріями (наприклад, за іменем)».
+"""
 
 import pytest
 
-pytestmark = pytest.mark.xfail(reason="T3 is not done yet", strict=True)
+from personal_assistant.fields import Field
+
+pytestmark = pytest.mark.xfail(reason="T2 is not done yet", strict=True)
 
 
 def names(records):
@@ -18,16 +24,15 @@ def test_search_by_part_of_phone(book):
     assert names(book.search("0679")) == ["Jane"]
 
 
-def test_nothing_found_gives_empty_list(book):
-    assert book.search("zzz") == []
-
-
 def test_search_by_email_and_address(book):
-    from personal_assistant.fields import Field
     book["Jane"].email = Field("jane@mail.example")
     book["John"].address = Field("Kyiv, Main St 1")
     assert names(book.search("MAIL.EXAMPLE")) == ["Jane"]
     assert names(book.search("kyiv")) == ["John"]
+
+
+def test_nothing_found_gives_empty_list(book):
+    assert book.search("zzz") == []
 
 
 # Command level: what the user sees.
@@ -38,7 +43,6 @@ def test_cmd_search_shows_only_matches(cli):
 
 
 def test_cmd_search_words_with_spaces(cli, book):
-    from personal_assistant.fields import Field
     book["John"].address = Field("Kyiv, Main St 1")
     assert "John" in cli('search "main st"')
 

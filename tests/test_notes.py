@@ -1,11 +1,11 @@
 import pytest
 
-from personal_assistant.notes import MAX_NOTE_LENGTH, Note, NoteBook
+from personal_assistant.notes import Note, NoteBook
 
 
 def test_note_text_is_stripped_and_checked():
     assert Note("  buy milk ").text == "buy milk"
-    for bad in ["", "   ", "x" * (MAX_NOTE_LENGTH + 1)]:
+    for bad in ["", "   "]:
         with pytest.raises(ValueError):
             Note(bad)
 

@@ -1,117 +1,132 @@
 # Tasks
 
-Each task is a GitHub issue with a detailed checklist (links in the table);
-this file is the short version.
+Every task is a line of the project's ТЗ (the «Персональний помічник» sheet):
+the ТЗ words are quoted in each task. Each task is also a GitHub issue with a
+checklist (links in the table).
 
-The core already works: contacts with phones and birthdays, notes (add and
-show), saving, the command loop with completion. The parts below are left as
-`NotImplementedError("T<n>: ...")`. The commands for them are already wired,
-so a task is only the model code and its tests.
+Already done in the core (not tasks): contacts with names, phones and
+birthdays; phone and birthday validation; changing a phone; adding and showing
+notes; saving to the user's folder and loading after a restart; the command
+loop.
 
 How to take a task:
 
-1. Write in the team chat which task you take (and in Trello).
+1. Assign the issue to yourself and write in the team chat.
 2. Branch `t<number>-<short-name>` from `main`.
-3. Write the code where the task says; delete the `pytestmark = ...` line in
-   the task's test file in `tests/tasks/`; make `pytest` and `flake8` clean.
-   You may add tests; do not weaken the given ones.
+3. Delete the `pytestmark = ...` line in the task's test file in `tests/tasks/`,
+   write the code, make `pytest` and `flake8` clean. You may add tests; do not
+   weaken the given ones.
 4. Try the commands by hand in `python -m personal_assistant`.
-5. Pull request to `main`, one reviewer from the team.
+5. Pull request to `main` with `Closes #<issue>`, one reviewer from the team.
 
-| # | Task | Where | Size | Issue |
-|---|------|-------|------|-------|
-| T1 | E-mail and address fields | `fields.py`: `Email`, `Address` | S | [#1](https://github.com/alterago/goit-pycore-project-group-5/issues/1) |
-| T2 | Phone in common formats | `fields.py`: `normalize_phone`, `Phone` | S | [#2](https://github.com/alterago/goit-pycore-project-group-5/issues/2) |
-| T3 | Contact search | `contacts.py`: `AddressBook.search` | S | [#3](https://github.com/alterago/goit-pycore-project-group-5/issues/3) |
-| T4 | Delete and rename contacts | `contacts.py`: `AddressBook.delete`, `rename` | S | [#4](https://github.com/alterago/goit-pycore-project-group-5/issues/4) |
-| T5 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | M | [#5](https://github.com/alterago/goit-pycore-project-group-5/issues/5) |
-| T6 | Edit and delete notes | `notes.py`: `NoteBook.edit`, `delete` | S | [#6](https://github.com/alterago/goit-pycore-project-group-5/issues/6) |
-| T7 | Note search | `notes.py`: `NoteBook.search` | S | [#7](https://github.com/alterago/goit-pycore-project-group-5/issues/7) |
-| T8 | Tags (extra part) | `notes.py`: `Note.add_tag`, `remove_tag`, `NoteBook.find_by_tag`, `sorted_by_tags` | M | [#8](https://github.com/alterago/goit-pycore-project-group-5/issues/8) |
-| T9 | Guess the command (extra part) | `cli/suggest.py`: `suggest_command` | S | [#9](https://github.com/alterago/goit-pycore-project-group-5/issues/9) |
+| # | Task | Where | Issue |
+|---|------|-------|-------|
+| T1 | E-mail and address in a contact | `fields.py`: `Email`, `Address` | — |
+| T2 | Contact search | `contacts.py`: `AddressBook.search` | — |
+| T3 | Delete a contact | `contacts.py`: `AddressBook.delete` | — |
+| T4 | Birthdays in the next N days | `contacts.py`: `AddressBook.upcoming_birthdays` | — |
+| T5 | Search, edit and delete notes | `notes.py`: `NoteBook.search`, `edit`, `delete` | — |
+| T6 | Add tags to notes (extra) | `notes.py`: `Note.add_tag` | — |
+| T7 | Search and sort notes by tags (extra) | `notes.py`: `NoteBook.find_by_tag`, `sorted_by_tags` | — |
+| T8 | Guess the command (extra) | `cli/suggest.py`: `suggest_command` | — |
 
-## T1 — E-mail and address fields
+Where the ТЗ says nothing about a detail, the rule below is the team's choice
+and is marked so.
 
-`Email(value)`: strip spaces; one `@`; a non-empty part before it; a domain
-with a dot after it; no spaces. Otherwise `ValueError` whose message starts
-with `Invalid e-mail`.
-`Address(value)`: strip spaces; not empty; at most 200 characters.
+## T1 — E-mail and address in a contact
 
-Done when: `tests/tasks/test_t1_email_address.py` passes; `add-email` and
-`add-address` work and the values show in `all`.
+ТЗ: «Зберігати контакти з іменами, адресами, номерами телефонів, email та днями
+народження»; «Валідація номера телефону та електронної пошти під час додавання
+або редагування контакту».
 
-## T2 — Phone in common formats
+- `Email(value)`: strip spaces; reject a value that is not like `name@domain.tld`
+  with `ValueError` whose message starts with `Invalid e-mail` (team's choice of
+  the message and of the check: one `@`, a dot in the domain, no spaces).
+- `Address(value)`: strip spaces; an empty address is `ValueError`. The ТЗ asks
+  only to store it — no other checks.
 
-`normalize_phone(raw)` turns `+38 (050) 123-45-67`, `+380501234567`,
-`380501234567`, `050-123-45-67`, `(050) 123 45 67` into `0501234567`: drop
-spaces, dashes and brackets, then the leading `+38`/`38`. `Phone` calls it
-before its 10-digit check, so the stored value is always 10 digits.
+Tests: `tests/tasks/test_t1_email_address.py`.
 
-Done when: `tests/tasks/test_t2_phone_formats.py` passes; `add John "+38 (050) 123-45-67"`
-stores `0501234567`; the same number in another format is a duplicate.
+## T2 — Contact search
 
-## T3 — Contact search
+ТЗ: «Здійснювати пошук контактів серед контактів книги»; «Пошук контактів за
+різними критеріями (наприклад, за іменем)».
 
-`AddressBook.search(query)` returns the records whose name, any phone,
-e-mail or address contains `query`, ignoring the letter case, in the order
-they were added; `[]` when none.
+- `AddressBook.search(query)`: records whose name, any phone, e-mail or address
+  contains `query`, ignoring the case, in the order they were added; `[]` when
+  none.
 
-Done when: `tests/tasks/test_t3_contact_search.py` passes; `search` shows a table.
+Tests: `tests/tasks/test_t2_contact_search.py`.
 
-## T4 — Delete and rename contacts
+## T3 — Delete a contact
 
-`AddressBook.delete(name)`: find the record ignoring the case and remove it;
-`KeyError` when there is none. `AddressBook.rename(old, new)`: the record
-keeps its phones and other fields and is stored under the new name;
-`KeyError` for an unknown contact; `ValueError("Contact <name> already exists.")`
-when another contact already has the new name (any case). Return the record.
+ТЗ: «Редагувати та видаляти записи з книги контактів»; «Редагування та видалення
+контактів». Editing is already there (`change`, `add-birthday`, `add-email`,
+`add-address`); deleting is the task.
 
-Done when: `tests/tasks/test_t4_delete_rename.py` passes; `delete` and `rename` work.
+- `AddressBook.delete(name)`: find the record ignoring the case and remove it;
+  `KeyError(f"contact {name}")` when there is none.
 
-## T5 — Birthdays in the next N days
+Tests: `tests/tasks/test_t3_delete_contact.py`.
 
-`AddressBook.upcoming_birthdays(days, today=None)` returns
-`(birthday date, record)` for every contact whose next birthday falls between
-`today` and `today + days`, both included, sorted by date. `today` defaults
-to `date.today()`. Contacts without a birthday are skipped; negative `days`
-raise `ValueError`. Use `birthdays.next_birthday()`; it already handles 29
-February and the new year.
+## T4 — Birthdays in the next N days
 
-Done when: `tests/tasks/test_t5_birthdays.py` passes; `birthdays 30` lists them.
+ТЗ: «Виводити список контактів, у яких день народження через задану кількість
+днів від поточної дати».
 
-## T6 — Edit and delete notes
+- `AddressBook.upcoming_birthdays(days, today=None)`: `(birthday date, record)`
+  for every contact whose next birthday is from `today` to `today + days`, both
+  included, sorted by date; without a birthday — skipped. Use
+  `birthdays.next_birthday()`.
 
-`NoteBook.edit(note_id, text)`: replace the text (checked by
-`notes.check_text`, the old text stays on error) and return the note.
-`NoteBook.delete(note_id)`. Both raise `KeyError` for an unknown id. Ids are
-never reused.
+Tests: `tests/tasks/test_t4_birthdays.py`.
 
-Done when: `tests/tasks/test_t6_edit_delete_notes.py` passes; `edit-note` and `delete-note` work.
+## T5 — Search, edit and delete notes
 
-## T7 — Note search
+ТЗ: «Проводити пошук за нотатками»; «Редагувати та видаляти нотатки»; «Пошук,
+редагування та видалення нотаток».
 
-`NoteBook.search(query)` returns `(id, note)` for notes whose text contains
-`query`, ignoring the case, in id order; `[]` when none.
+- `NoteBook.search(query)`: `(id, note)` whose text contains `query`, ignoring
+  the case, in id order.
+- `NoteBook.edit(note_id, text)`: check the text with `check_text` (the old text
+  stays on error), replace it, return the note.
+- `NoteBook.delete(note_id)`. Edit and delete raise `KeyError` for an unknown id.
 
-Done when: `tests/tasks/test_t7_note_search.py` passes; `search-notes` shows a table.
+Tests: `tests/tasks/test_t5_notes_search_edit_delete.py`.
 
-## T8 — Tags (extra part, +10 points with T9)
+## T6 — Add tags to notes (extra part)
 
-`Note.add_tag(tag)`: a tag is stored lowercase without a leading `#`; no
-spaces, not empty (`ValueError`); adding the same tag twice keeps one.
-`Note.remove_tag(tag)`: same normalization; `ValueError` when the note has no
-such tag. `NoteBook.find_by_tag(tag)`: `(id, note)` with that tag, in id
-order. `NoteBook.sorted_by_tags()`: all notes sorted by their sorted tag
-list; notes without tags last.
+ТЗ, додаткові вимоги: «Додавати в нотатки "теги", ключові слова, що описують
+тему та предмет запису»; «Додавання "тегів" до нотаток».
 
-Done when: `tests/tasks/test_t8_tags.py` passes; `tag`, `untag`, `find-tag`,
-`notes-by-tags` work.
+- `Note.add_tag(tag)`: team's choice of the tag form — lowercase, without a
+  leading `#`, one word; empty or with a space is `ValueError`; the same tag
+  twice is kept once.
 
-## T9 — Guess the command (extra part)
+Tests: `tests/tasks/test_t6_add_tags.py`.
 
-`suggest_command(text, commands)` returns the command closest to what the
-user typed, or `None` when nothing is close (`difflib.get_close_matches` with
-`n=1`). The loop already shows "Did you mean '...'?" when it returns one.
+## T7 — Search and sort notes by tags (extra part)
 
-Done when: `tests/tasks/test_t9_suggest_command.py` passes; typing `ad-note`
-suggests `add-note`.
+ТЗ, додаткові вимоги: «Здійснювати пошук та сортування нотаток за ключовими
+словами (тегами)»; «Пошук та сортування нотаток за "тегами"».
+
+- `NoteBook.find_by_tag(tag)`: `(id, note)` with that tag (compared like T6:
+  without `#`, ignoring the case), in id order.
+- `NoteBook.sorted_by_tags()`: all `(id, note)` sorted by the note's sorted tag
+  list; notes without tags last (team's choice of the order).
+
+Tests: `tests/tasks/test_t7_search_sort_by_tags.py` (they set tags directly, so
+T7 does not wait for T6).
+
+## T8 — Guess the command (extra part)
+
+ТЗ, додаткові вимоги, «Інтелектуальний аналіз»: «Помічник повинен вгадувати, що
+хоче від нього користувач, на основі введеного тексту та пропонувати найближчу
+команду для виконання». Not in the TECH acceptance criteria; asked the mentor
+how much is expected.
+
+- `suggest_command(text, commands)`: the command closest to `text`, ignoring
+  the case, or `None` when nothing is close. The loop already prints
+  "Did you mean '...'?".
+
+Tests: `tests/tasks/test_t8_suggest_command.py`.
